@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Variable number of slides to show</title>
+    <style type="text/css">
+    	.outer { margin: 0 200px; }
+    	.slider { position: relative; width: 100%; height: 300px; overflow: hidden;}
+    	/*.slider_wrap { position: relative; }*/
+    	.slider_item { float: left; width: 100%; height: 300px; }
+    	.slide_1 { background-color: green; }
+    	.slide_2 { background-color: red; }
+    	.slide_3 { background-color: blue; }
+    	.slide_4 { background-color: yellow; }
+    	.slide_5 { background-color: black; }
+    	.slide_6 { background-color: brown; }
+    	.slide_7 { background-color: pink; }
+    	.prev { position: absolute; top: 50%; left: 0; cursor: pointer; }
+    	.next { position: absolute; top: 50%; right: 0; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="outer">
+	<div class="slider">
+		<span></span>
+		<!--<div class="slider_wrap">-->
+			<div class="slides">
+				<div class="slider_item slide_1"></div>
+				<div class="slider_item slide_2"></div>
+				<div class="slider_item slide_3"></div>
+				<div class="slider_item slide_4"></div>
+				<div class="slider_item slide_5"></div>
+				<div class="slider_item slide_6"></div>
+				<div class="slider_item slide_7"></div>
+			</div>
+		<!--</div>-->
+		<div class="prev">Prev</div>
+		<div class="next">Next</div>
+	</div>
+</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('.slider').each(function(){
+				var $this = $(this);
+				var NumberOfSlides = $this.find('.slider_item').length;
+				var n = 4; //number of slides to show
+				var slideWidth = ($this.width())/n;
+				var i = 1;
+				
+				$this.find('span').text(i);
+				$this.find('.slides').css({
+					'width': NumberOfSlides*slideWidth,
+					'marginLeft' : 0
+				});
+				$this.find('.slider_item').css('width', slideWidth);
+					
+				$this.find('.next').click(function(){
+	    			if (i < (NumberOfSlides - (n-1))) {
+						$this.find('.slides').animate({'marginLeft' : i*(-slideWidth)}, 300);
+						i = i + 1;
+						$this.find('span').text(i);
+					}	
+				})
+				$this.find('.prev').click(function(){
+					if (i > 1) {
+						$this.find('.slides').animate({'marginLeft' : ((i-1)*(-slideWidth)+slideWidth)}, 300);
+						i = i - 1;
+						$this.find('span').text(i);
+					}
+					else {
+						return false;
+					}
+				})
+			
+				//change dimensions on resize window
+				$(window).resize(function(){
+					slideWidth = ($this.width())/n;
+					$this.find('.slides').css({
+						'width': NumberOfSlides*slideWidth,
+						'marginLeft' : (i-1)*(-slideWidth)  
+					});
+					$this.find('.slider_item').css('width', slideWidth);
+				})
+				//-----------------------//
+			
+			})
+
+		})
+	</script>
+</body>
+</html>

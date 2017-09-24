@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Slider plugin with dots</title>
+    <style type="text/css">
+    	.outer { margin: 0 200px; }
+    	.slider { position: relative; width: 100%; height: 300px; overflow: hidden;}
+    	/*.slider_wrap { position: relative; }*/
+    	.slider_item { float: left; width: 100%; height: 300px; }
+    	.slide_1 { background-color: green; }
+    	.slide_2 { background-color: red; }
+    	.slide_3 { background-color: blue; }
+    	.slide_4 { background-color: yellow; }
+    	.slide_5 { background-color: orange; }
+    	.slide_6 { background-color: brown; }
+    	.slide_7 { background-color: pink; }
+    	.prev { position: absolute; top: 50%; left: 0; cursor: pointer; }
+    	.next { position: absolute; top: 50%; right: 0; cursor: pointer; }
+    	.dots { position: absolute; bottom: 0; }
+    	.dot { display: inline-block; float: left; padding: 3px; cursor: pointer; }
+    	.dot.active { transform: scale(1.2); font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="outer">
+	<div class="slider">
+		<span></span>
+		<!--<div class="slider_wrap">-->
+			<div class="slides">
+				<div class="slider_item slide_1"></div>
+				<div class="slider_item slide_2"></div>
+				<div class="slider_item slide_3"></div>
+				<div class="slider_item slide_4"></div>
+				<div class="slider_item slide_5"></div>
+				<div class="slider_item slide_6"></div>
+				<div class="slider_item slide_7"></div>
+			</div>
+		<!--</div>-->
+		<div class="prev">Prev</div>
+		<div class="next">Next</div>
+	</div>
+</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		(function($){
+			$(document).ready(function(){
+
+				$.fn.slider = function() {
+
+					return this.each(function(){
+						var $this = $(this);
+						var NumberOfSlides = $this.find('.slider_item').length;
+						var slideWidth = $this.width();
+						var i = 1;
+												
+						$this.find('span').text(i);
+						$this.find('.slides').css({
+							'width': NumberOfSlides*slideWidth,
+							'marginLeft' : 0
+						});
+						$this.find('.slider_item').css('width', slideWidth);
+
+						$this.append('<ul class="dots"></ul');
+
+						var j = 0;
+						for (j; j < NumberOfSlides; j++ ) {
+							$this.find('ul.dots').append('<li class="dot">' + (j + 1) + '</li>');
+						}
+						$this.find('li:first-child').addClass('active');
+							
+						$this.find('.next').click(function(){
+			    			if (i < NumberOfSlides) {
+								$this.find('.slides').animate({'marginLeft' : i*(-slideWidth)}, 300);
+								i = i + 1;
+								$this.find('.dot').removeClass('active').eq(i-1).addClass('active');
+								$this.find('span').text(i);
+							}	
+						})
+						$this.find('.prev').click(function(){
+							if (i > 1) {
+								$this.find('.slides').animate({'marginLeft' : (i-2)*(-slideWidth)}, 300);
+								i = i - 1;
+								$this.find('.dot').removeClass('active').eq(i-1).addClass('active');
+								$this.find('span').text(i);
+							}
+							else {
+								return false;
+							}
+						})
+						$this.find('.dot').click(function(){
+							var ind = $(this).index();
+							$this.find('.dot').removeClass('active').eq(ind).addClass('active');
+							$this.find('.slides').animate({'marginLeft' : ind*(-slideWidth)}, 300);
+							i = ind + 1;
+							$this.find('span').text(i);
+						})
+					
+						//change dimensions on resize window
+						$(window).resize(function(){
+
+							slideWidth = $this.width();
+							$this.find('.slides').css({
+								'width': NumberOfSlides*slideWidth,
+								'marginLeft' : (i-1)*(-slideWidth)  
+							});
+							$this.find('.slider_item').css('width', slideWidth);
+						})
+						//-----------------------//
+					
+					})
+
+				};
+
+				$('.slider').slider();
+
+			})
+		})(jQuery)
+	</script>
+</body>
+</html>

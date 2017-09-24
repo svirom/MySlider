@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>One slider on the page</title>
+    <style type="text/css">
+    	.outer { margin: 0 200px; }
+    	.slider { position: relative; width: 100%; height: 300px; overflow: hidden;}
+    	/*.slider_wrap { position: relative; }*/
+    	.slider_item { float: left; width: 100%; height: 300px; }
+    	.slide_1 { background-color: green; }
+    	.slide_2 { background-color: red; }
+    	.slide_3 { background-color: blue; }
+    	.slide_4 { background-color: yellow; }
+    	.prev { position: absolute; top: 50%; left: 0; cursor: pointer; }
+    	.next { position: absolute; top: 50%; right: 0; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="outer">
+	<div class="slider">
+		<span></span>
+		<!--<div class="slider_wrap">-->
+			<div class="slides">
+				<div class="slider_item slide_1"></div>
+				<div class="slider_item slide_2"></div>
+				<div class="slider_item slide_3"></div>
+				<div class="slider_item slide_4"></div>
+			</div>
+		<!--</div>-->
+		<div class="prev">Prev</div>
+		<div class="next">Next</div>
+	</div>
+</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			var NumberOfSlides = $('.slider_item').length;
+			var slideWidth = $('.slider').width();
+			var i = 1;
+
+			//change dimensions on resize window
+			$(window).resize(function(){
+				slideWidth = $('.slider').width();
+				$('.slides').css({
+					'width': NumberOfSlides*slideWidth,
+					'marginLeft' : (i-1)*(-slideWidth)  
+				});
+				$('.slider_item').css('width', slideWidth);
+			})
+			//-----------------------//
+
+			$('.slides').css({
+				'width': NumberOfSlides*slideWidth,
+				'marginLeft' : 0
+			});
+			$('.slider_item').css('width', slideWidth);
+
+			$('.slider span').text(i);
+			$('.next').click(function(){
+				if (i < NumberOfSlides) {
+					$('.slides').animate({'marginLeft' : i*(-slideWidth)}, 300);
+					i = i + 1;
+					$('.slider span').text(i);
+				}			
+			})
+			$('.prev').click(function(){
+				if (i > 1) {
+					$('.slides').animate({'marginLeft' : ((i-1)*(-slideWidth)+slideWidth)}, 300);
+					i = i - 1;
+					$('.slider span').text(i);
+				}
+				else {
+					return false;
+				}	
+			})
+
+		})
+	</script>
+</body>
+</html>
